@@ -10,7 +10,6 @@ import (
 	"net/url"
 	"os"
 	"strings"
-	"time"
 )
 
 var (
@@ -44,8 +43,6 @@ func main() {
 	mongoDialInfo.DialServer = func(addr *mgo.ServerAddr) (net.Conn, error) {
 		return tls.Dial("tcp", addr.String(), &tls.Config{InsecureSkipVerify: true})
 	}
-
-	mongoDialInfo.Timeout = 2 * time.Second
 
 	log.Println("Connecting to MongoDB")
 	mongoSession, err := mgo.DialWithInfo(mongoDialInfo)
@@ -95,7 +92,7 @@ func processTweet(log *Logger, collection *mgo.Collection, tweet anaconda.Tweet)
 
 	err := collection.Insert(tweet)
 	if err != nil {
-		log.Fatalf("Failed to save tweet #%s: %s", tweet.IdStr, err)
+		log.Errorf("Failed to save tweet #%s: %s", tweet.IdStr, err)
 	}
 
 	for _, url := range urls {
