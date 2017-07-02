@@ -1,0 +1,5 @@
+env
+bootstrap.sh
+twitter2mongo
+*.exe
+.idea/
